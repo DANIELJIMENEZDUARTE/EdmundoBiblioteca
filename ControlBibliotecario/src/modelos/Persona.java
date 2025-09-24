@@ -1,4 +1,4 @@
-package utilerias;
+package modelos;
 
 public class Persona {
 
