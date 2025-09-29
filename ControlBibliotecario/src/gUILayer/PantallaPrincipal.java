@@ -28,65 +28,106 @@ public class PantallaPrincipal extends JFrame {
     public void inItComponents() {
         this.setLayout(new BorderLayout());
 
+        JPanel menuPanel = new JPanel(new BorderLayout());
+        JLabel lblTitulo = new JLabel("MENU PRINCIPAL", JLabel.CENTER);
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 20));
+        menuPanel.add(lblTitulo, BorderLayout.NORTH);
+
         JPanel panelBotones = new JPanel();
+        panelBotones.setLayout(new GridLayout(5, 1, 10, 10));
+        
         JButton btn1 = new JButton("REGISTRO DE USUARIOS");
         JButton btn2 = new JButton("REGISTRO DE LIBROS");
         JButton btn3 = new JButton("PRESTAMO DE LIBROS");
         JButton btn4 = new JButton("DEVOLUCIÓN DE LIBROS");
         JButton btn5 = new JButton("VISUALIZACIÓN DE DATOS");
 
+        Dimension buttonSize = new Dimension(200, 40);
+        btn1.setPreferredSize(buttonSize);
+        btn2.setPreferredSize(buttonSize);
+        btn3.setPreferredSize(buttonSize);
+        btn4.setPreferredSize(buttonSize);
+        btn5.setPreferredSize(buttonSize);
+
         panelBotones.add(btn1);
         panelBotones.add(btn2);
         panelBotones.add(btn3);
         panelBotones.add(btn4);
         panelBotones.add(btn5);
-        this.add(panelBotones, BorderLayout.NORTH);
+
+        JPanel botonera = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 20));
+        botonera.add(panelBotones);
+
+        menuPanel.add(botonera, BorderLayout.CENTER);
 
         contentPane = new JPanel();
         layout = new CardLayout();
         contentPane.setLayout(layout);
         this.add(contentPane, BorderLayout.CENTER);
 
+        JPanel tarjeta0 = menuPanel; //menu principal
         JPanel tarjeta1 = crearRegistroUsuarios();
         JPanel tarjeta2 = crearRegistroLibros();
         JPanel tarjeta3 = crearPrestamo();
         JPanel tarjeta4 = crearDevolucion();
         JPanel tarjeta5 = crearVisualizacionUsuarios();
 
+        contentPane.add(tarjeta0, "Tarjeta 0");
         contentPane.add(tarjeta1, "Tarjeta 1");
         contentPane.add(tarjeta2, "Tarjeta 2");
         contentPane.add(tarjeta3, "Tarjeta 3");
         contentPane.add(tarjeta4, "Tarjeta 4");
         contentPane.add(tarjeta5, "Tarjeta 5");
 
-        btn1.addActionListener(e -> layout.show(contentPane, "Tarjeta 1"));
-        btn2.addActionListener(e -> layout.show(contentPane, "Tarjeta 2"));
-        btn3.addActionListener(e -> {
-            contentPane.remove(2);
-            JPanel nuevaTarjeta3 = crearPrestamo();
-            contentPane.add(nuevaTarjeta3, "Tarjeta 3");
-            layout.show(contentPane, "Tarjeta 3");
-        });
-        btn4.addActionListener(e -> {
-            contentPane.remove(3);
-            JPanel nuevaTarjeta4 = crearDevolucion();
-            contentPane.add(nuevaTarjeta4, "Tarjeta 4");
-            layout.show(contentPane, "Tarjeta 4");
-        });
-        btn5.addActionListener(e -> {
-            contentPane.remove(4);
-            JPanel nuevaTarjeta5 = crearVisualizacionUsuarios();
-            contentPane.add(nuevaTarjeta5, "Tarjeta 5");
-            layout.show(contentPane, "Tarjeta 5");
-        });
+        // ...dentro de inItComponents()...
 
-        layout.show(contentPane, "Tarjeta 1");
+    btn1.addActionListener(e -> {
+    contentPane.remove(contentPane.getComponentZOrder(contentPane.getComponent(1)));
+    JPanel nuevaTarjeta1 = crearRegistroUsuarios();
+    contentPane.add(nuevaTarjeta1, "Tarjeta 1");
+    layout.show(contentPane, "Tarjeta 1");
+    });
+
+    btn2.addActionListener(e -> {
+    contentPane.remove(contentPane.getComponentZOrder(contentPane.getComponent(2)));
+    JPanel nuevaTarjeta2 = crearRegistroLibros();
+    contentPane.add(nuevaTarjeta2, "Tarjeta 2");
+    layout.show(contentPane, "Tarjeta 2");
+    });
+
+    btn3.addActionListener(e -> {
+    contentPane.remove(contentPane.getComponentZOrder(contentPane.getComponent(3)));
+    JPanel nuevaTarjeta3 = crearPrestamo();
+    contentPane.add(nuevaTarjeta3, "Tarjeta 3");
+    layout.show(contentPane, "Tarjeta 3");
+    });
+
+    btn4.addActionListener(e -> {
+    contentPane.remove(contentPane.getComponentZOrder(contentPane.getComponent(4)));
+    JPanel nuevaTarjeta4 = crearDevolucion();
+    contentPane.add(nuevaTarjeta4, "Tarjeta 4");
+    layout.show(contentPane, "Tarjeta 4");
+    });
+
+    btn5.addActionListener(e -> {
+    contentPane.remove(contentPane.getComponentZOrder(contentPane.getComponent(5)));
+    JPanel nuevaTarjeta5 = crearVisualizacionUsuarios();
+    contentPane.add(nuevaTarjeta5, "Tarjeta 5");
+    layout.show(contentPane, "Tarjeta 5");
+    });
+        layout.show(contentPane, "Tarjeta 0");
+    }
+
+    private JButton crearBotonRegresar() {
+    JButton btnRegresar = new JButton("Volver al menu");
+    btnRegresar.addActionListener(e -> layout.show(contentPane, "Tarjeta 0"));
+    return btnRegresar;
     }
 
     // Tarjeta para registrar usuarios
     private JPanel crearRegistroUsuarios() {
         JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBackground(Color.CYAN);
+        panel.setBackground(Color.LIGHT_GRAY);
         panel.add(new JLabel("REGISTRO DE USUARIOS", JLabel.CENTER));
         panel.setFont(new Font("Arial", Font.BOLD, 18));
 
@@ -160,6 +201,16 @@ public class PantallaPrincipal extends JFrame {
         reglas.anchor = GridBagConstraints.CENTER;
         panel.add(btnRegistrar, reglas);
 
+        JButton btnRegresar = crearBotonRegresar();
+
+        reglas.gridwidth = 1;
+        reglas.gridx = 1;              
+        reglas.gridy = 10;             
+        reglas.insets = new Insets(30, 10, 10, 10);
+        reglas.anchor = GridBagConstraints.SOUTHEAST;
+        reglas.fill = GridBagConstraints.NONE;
+        panel.add(btnRegresar, reglas);
+
         // Acción del botón
         btnRegistrar.addActionListener(e -> {
             String nombre = txtNombre.getText();
@@ -201,7 +252,7 @@ public class PantallaPrincipal extends JFrame {
     // Tarjeta para registrar libros
     private JPanel crearRegistroLibros() {
         JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBackground(Color.PINK);
+        panel.setBackground(Color.LIGHT_GRAY);
         panel.add(new JLabel("REGISTRO DE LIBROS", JLabel.CENTER));
         panel.setFont(new Font("Arial", Font.BOLD, 18));
 
@@ -240,6 +291,7 @@ public class PantallaPrincipal extends JFrame {
         reglas.gridwidth = 2;
         panel.add(btnRegistrar, reglas);
 
+
         btnRegistrar.addActionListener(e -> {
             String titulo = txtTitulo.getText();
             String autor = txtAutor.getText();
@@ -258,6 +310,17 @@ public class PantallaPrincipal extends JFrame {
             }
         });
 
+        
+        JButton btnRegresar = crearBotonRegresar();
+
+        reglas.gridwidth = 1;
+        reglas.gridx = 1;              
+        reglas.gridy = 10;             
+        reglas.insets = new Insets(30, 10, 10, 10);
+        reglas.anchor = GridBagConstraints.SOUTHEAST;
+        reglas.fill = GridBagConstraints.NONE;
+        panel.add(btnRegresar, reglas);
+        
         return panel;
     }
 
@@ -277,7 +340,7 @@ public class PantallaPrincipal extends JFrame {
             while ((linea = br.readLine()) != null) {
                 String[] campos = linea.split(",");
                 if (campos.length > 2) {
-                    usuarios.add(campos[2]);
+                    usuarios.add(campos[0]);
                 }
             }
         } catch (Exception e) {
@@ -322,6 +385,16 @@ public class PantallaPrincipal extends JFrame {
         reglas.gridy = 2;
         reglas.gridwidth = 2;
         panel.add(btnPrestar, reglas);
+        
+        JButton btnRegresar = crearBotonRegresar();
+
+        reglas.gridwidth = 1;
+        reglas.gridx = 1;              
+        reglas.gridy = 10;             
+        reglas.insets = new Insets(30, 10, 10, 10);
+        reglas.anchor = GridBagConstraints.SOUTHEAST;
+        reglas.fill = GridBagConstraints.NONE;
+        panel.add(btnRegresar, reglas);
 
         // Lógica del botón prestar
         btnPrestar.addActionListener(e -> {
@@ -350,7 +423,7 @@ public class PantallaPrincipal extends JFrame {
     // Tarjeta para devolución de libros
     private JPanel crearDevolucion() {
         JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBackground(Color.ORANGE);
+        panel.setBackground(Color.LIGHT_GRAY);
 
         GridBagConstraints reglas = new GridBagConstraints();
         reglas.insets = new Insets(10, 10, 10, 10);
@@ -382,7 +455,16 @@ public class PantallaPrincipal extends JFrame {
         reglas.gridy = 1;
         reglas.gridwidth = 2;
         panel.add(btnDevolver, reglas);
+        
+        JButton btnRegresar = crearBotonRegresar();
 
+        reglas.gridwidth = 1;
+        reglas.gridx = 1;              
+        reglas.gridy = 10;             
+        reglas.insets = new Insets(30, 10, 10, 10);
+        reglas.anchor = GridBagConstraints.SOUTHEAST;
+        reglas.fill = GridBagConstraints.NONE;
+        panel.add(btnRegresar, reglas);
         // Lógica del botón devolver
         btnDevolver.addActionListener(e -> {
             String titulo = (String) comboLibros.getSelectedItem();
@@ -407,7 +489,7 @@ public class PantallaPrincipal extends JFrame {
     // Tarjeta para visualizar usuarios y libros registrados
     private JPanel crearVisualizacionUsuarios() {
         JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBackground(Color.WHITE);
+        panel.setBackground(Color.LIGHT_GRAY);
         GridBagConstraints reglas = new GridBagConstraints();
 
         // Columnas de la tabla de usuarios
@@ -501,6 +583,7 @@ public class PantallaPrincipal extends JFrame {
         panelBotones.add(btnModificar);
         panelBotones.add(btnEliminar);
 
+
         // ----------------------------
         // Tabla de libros registrados
         // ----------------------------
@@ -526,6 +609,7 @@ public class PantallaPrincipal extends JFrame {
         // Botones para libros
         JButton btnModificarLibro = new JButton("Modificar Libro");
         JButton btnEliminarLibro = new JButton("Eliminar Libro");
+        JButton btnRegresar = crearBotonRegresar();
 
         // Acción eliminar libro
         btnEliminarLibro.addActionListener(e -> {
@@ -595,6 +679,7 @@ public class PantallaPrincipal extends JFrame {
         // Agregar botones de libros al mismo panel
         panelBotones.add(btnModificarLibro);
         panelBotones.add(btnEliminarLibro);
+        panelBotones.add(btnRegresar);
 
         // Panel con tablas de usuarios y libros
         JPanel panelUsuarios = new JPanel(new BorderLayout());

@@ -216,6 +216,12 @@ public class ManejoRegistros {
             return false;
         }
 
+        if (nombre.matches(".\\d.") || apellidos.matches(".\\d.")) {
+        JOptionPane.showMessageDialog(null, "Nombre y apellidos no deben contener números", "Error",
+                JOptionPane.ERROR_MESSAGE);
+        return false;
+        }
+
         if (telefono.length() != 10 || !telefono.matches("\\d+")) {
             JOptionPane.showMessageDialog(null, "Teléfono no válido", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
